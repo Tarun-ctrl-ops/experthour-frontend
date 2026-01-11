@@ -1,0 +1,50 @@
+body {
+  font-family: Arial, Helvetica, sans-serif;
+  margin: 0;
+  background: #f7f8fa;
+}
+
+.container {
+  max-width: 1100px;
+  margin: auto;
+  padding: 20px;
+  background: white;
+  min-height: 100vh;
+}
+
+nav {
+  margin-bottom: 20px;
+}
+
+nav a {
+  margin-right: 15px;
+  text-decoration: none;
+  font-weight: 600;
+  color: #333;
+}
+
+nav a:hover {
+  color: #007bff;
+}
+
+h1 {
+  margin-bottom: 10px;
+}
+
+.card {
+  border: 1px solid #ddd;
+  padding: 15px;
+  border-radius: 6px;
+  margin-bottom: 15px;
+  background: #fff;
+}
+
+input, select, button {
+  padding: 8px;
+  margin-right: 8px;
+  margin-top: 5px;
+}
+
+button {
+  cursor: pointer;
+}
