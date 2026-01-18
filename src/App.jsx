@@ -11,12 +11,13 @@ export default function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route element={<AppLayout />}>
-          <Route path="/signup" element={<UserPage />} />
-          <Route path="/login" element={<LoginPage />} />
-          <Route path="/experts" element={<ExpertPage />} />
-          <Route path="/availability" element={<AvailabilityPage />} />
-          <Route path="/book" element={<BookingPage />} />
+        {/* Root layout */}
+        <Route path="/" element={<AppLayout />}>
+          <Route index element={<UserPage />} />
+          <Route path="login" element={<LoginPage />} />
+          <Route path="experts" element={<ExpertPage />} />
+          <Route path="availability" element={<AvailabilityPage />} />
+          <Route path="book" element={<BookingPage />} />
         </Route>
       </Routes>
     </BrowserRouter>
