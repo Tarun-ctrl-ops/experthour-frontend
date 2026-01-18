@@ -42,7 +42,7 @@ export default function ExpertPage() {
       </form>
 
       <ul>
-        {experts.map(e => (
+        {Array.isArray(experts) && experts.map(e => (
           <li key={e.id}>{e.name} — {e.skills} — ₹{e.pricePerHour}</li>
         ))}
       </ul>

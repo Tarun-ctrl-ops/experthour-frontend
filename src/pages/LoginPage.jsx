@@ -1,17 +1,15 @@
 import { useState } from "react";
-import axios from "axios";
+import { login } from "../api/userApi";
 import { setToken } from "../utils/auth";
 
 export default function LoginPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const login = async (e) => {
+  const loginUser = async (e) => {
     e.preventDefault();
-    const res = await axios.post("http://localhost:8080/api/auth/login", {
-      email, password
-    });
-    setToken(res.data.token);
+    const res = await login({ email, password });
+    localStorage.setItem("token", res.token);
     alert("Logged in!");
   };
 
