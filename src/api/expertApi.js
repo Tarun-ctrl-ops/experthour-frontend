@@ -8,5 +8,6 @@ export const getAllExperts = async () => {
 
 export const createExpert = (data) => api.post("/experts", data);
 export const setAvailability = (id, from, to) =>
-  api.post(`/experts/${id}/availability`, { from, to });
+  api.put(`/experts/${id}/availability`, { from, to });
+
 

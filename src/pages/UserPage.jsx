@@ -13,10 +13,11 @@ export default function UserPage() {
   };
 
   const signin = async () => {
-    const res = await login(email, password);
+    const res = await login({ email, password });
     localStorage.setItem("token", res.token);
     alert("Logged in");
   };
+
 
   return (
     <>
