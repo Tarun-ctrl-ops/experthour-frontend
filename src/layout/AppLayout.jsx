@@ -4,7 +4,7 @@ export default function AppLayout() {
   return (
     <>
       <nav style={{ padding: "10px", borderBottom: "1px solid #ccc" }}>
-        <Route path="signup" element={<UserPage />} />
+        <Link to="/">Signup</Link> |{" "}
         <Link to="/login">Login</Link> |{" "}
         <Link to="/experts">Experts</Link> |{" "}
         <Link to="/availability">Availability</Link> |{" "}
@@ -17,3 +17,4 @@ export default function AppLayout() {
     </>
   );
 }
+
