@@ -1,6 +1,6 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import AppLayout from "./layout/AppLayout";
-
+import ProtectedRoute from "./components/ProtectedRoute";
 import UserPage from "./pages/UserPage";
 import LoginPage from "./pages/LoginPage";
 import ExpertPage from "./pages/ExpertPage";
@@ -15,10 +15,15 @@ export default function App() {
           <Route index element={<UserPage />} />
           <Route path="login" element={<LoginPage />} />
           <Route path="experts" element={<ExpertPage />} />
-          <Route path="availability" element={<AvailabilityPage />} />
-          <Route path="book" element={<BookingPage />} />
+
+          {/* 🔒 Protected Routes */}
+          <Route element={<ProtectedRoute />}>
+            <Route path="availability" element={<AvailabilityPage />} />
+            <Route path="book" element={<BookingPage />} />
+          </Route>
         </Route>
       </Routes>
+
     </BrowserRouter>
 
   );

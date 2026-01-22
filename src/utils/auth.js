@@ -1,11 +1,12 @@
-export function getToken() {
+export const getToken = () => {
   return localStorage.getItem("token");
-}
+};
 
-export function setToken(token) {
-  localStorage.setItem("token", token);
-}
+export const isAuthenticated = () => {
+  return !!getToken();
+};
 
-export function logout() {
+export const logout = () => {
   localStorage.removeItem("token");
-}
+};
+
