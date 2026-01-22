@@ -8,10 +8,15 @@ export default function LoginPage() {
 
   const loginUser = async (e) => {
     e.preventDefault();
-    const res = await login({ email, password });
-    localStorage.setItem("token", res.token);
+
+    const data = await login({ email, password });
+
+    // backend returns token directly
+    localStorage.setItem("token", data);
+
     alert("Logged in!");
   };
+
 
   return (
     <form onSubmit={loginUser}>

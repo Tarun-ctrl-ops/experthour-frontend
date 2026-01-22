@@ -11,7 +11,6 @@ export default function App() {
   return (
     <BrowserRouter>
       <Routes>
-        {/* Root layout */}
         <Route path="/" element={<AppLayout />}>
           <Route index element={<UserPage />} />
           <Route path="login" element={<LoginPage />} />
@@ -21,6 +20,7 @@ export default function App() {
         </Route>
       </Routes>
     </BrowserRouter>
+
   );
 }
 
