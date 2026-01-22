@@ -1,6 +1,8 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import AppLayout from "./layout/AppLayout";
 import ProtectedRoute from "./components/ProtectedRoute";
+import RoleProtectedRoute from "./components/RoleProtectedRoute";
+
 import UserPage from "./pages/UserPage";
 import LoginPage from "./pages/LoginPage";
 import ExpertPage from "./pages/ExpertPage";
@@ -16,16 +18,19 @@ export default function App() {
           <Route path="login" element={<LoginPage />} />
           <Route path="experts" element={<ExpertPage />} />
 
-          {/* 🔒 Protected Routes */}
-          <Route element={<ProtectedRoute />}>
-            <Route path="availability" element={<AvailabilityPage />} />
+          {/* USER ONLY */}
+          <Route element={<RoleProtectedRoute allowedRoles={["USER"]} />}>
             <Route path="book" element={<BookingPage />} />
+          </Route>
+
+          {/* EXPERT ONLY */}
+          <Route element={<RoleProtectedRoute allowedRoles={["EXPERT"]} />}>
+            <Route path="availability" element={<AvailabilityPage />} />
           </Route>
         </Route>
       </Routes>
-
     </BrowserRouter>
-
   );
 }
+
 
