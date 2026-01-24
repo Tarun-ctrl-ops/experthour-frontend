@@ -1,69 +1,47 @@
 import { useEffect, useState } from "react";
-import { getAllExperts, createExpert } from "../api/expertApi";
+import { getExperts, createExpert } from "../api/expertApi";
 
 export default function ExpertPage() {
   const [experts, setExperts] = useState([]);
-  const [form, setForm] = useState({
-    name: "",
-    title: "",
-    skills: "",
-    pricePerHour: "",
-    bio: "",
-  });
+  const [form, setForm] = useState({});
 
   useEffect(() => {
-    getAllExperts().then(setExperts);
+    getExperts().then(setExperts);
   }, []);
 
-  const submit = async (e) => {
+  async function submit(e) {
     e.preventDefault();
-    await createExpert({
-      ...form,
-      pricePerHour: Number(form.pricePerHour),
-    });
-    alert("Expert created");
-  };
+    await createExpert(form);
+    window.location.reload();
+  }
 
   return (
-    <div className="grid grid-cols-3 gap-8">
-      <div className="col-span-2 space-y-4">
-        {experts.map((e) => (
-          <div
-            key={e.id}
-            className="bg-white p-6 rounded shadow"
-          >
-            <h3 className="text-lg font-bold">{e.name}</h3>
-            <p className="text-sm text-gray-600">{e.title}</p>
-            <p className="mt-2">{e.skills}</p>
-            <p className="mt-2 text-linkedin font-semibold">
-              ₹{e.pricePerHour}/hr
-            </p>
+    <div className="grid-2">
+      <div>
+        {experts.map(e => (
+          <div className="card" key={e.id}>
+            <h3>{e.name}</h3>
+            <p>{e.title}</p>
+            <p>{e.skills}</p>
+            <strong>₹{e.pricePerHour}/hr</strong>
           </div>
         ))}
       </div>
 
-      <form
-        onSubmit={submit}
-        className="bg-white p-6 rounded shadow space-y-3"
-      >
-        <h3 className="font-bold">Create Expert</h3>
-        {Object.keys(form).map((k) => (
-          <input
-            key={k}
-            placeholder={k}
-            className="w-full border px-3 py-2 rounded"
-            value={form[k]}
-            onChange={(e) =>
-              setForm({ ...form, [k]: e.target.value })
-            }
-          />
-        ))}
-        <button className="w-full bg-linkedin text-white py-2 rounded">
-          Create
-        </button>
-      </form>
+      <div className="card">
+        <h3>Create Expert</h3>
+        <form onSubmit={submit}>
+          {["name", "title", "skills", "pricePerHour", "bio"].map(f => (
+            <div className="form-group" key={f}>
+              <input placeholder={f} onChange={e => setForm({ ...form, [f]: e.target.value })} />
+            </div>
+          ))}
+          <button>Create</button>
+        </form>
+      </div>
     </div>
   );
 }
+
 
 
