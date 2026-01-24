@@ -2,9 +2,12 @@
 @tailwind components;
 @tailwind utilities;
 
+/* ✅ Plain CSS for globals (Tailwind v4 safe) */
 body {
-  @apply bg-gray-100 text-gray-800;
+  background-color: #f3f4f6; /* gray-100 */
+  color: #1f2937;           /* gray-800 */
   font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
     Roboto, Helvetica, Arial, sans-serif;
 }
+
 
