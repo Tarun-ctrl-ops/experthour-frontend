@@ -1,4 +1,4 @@
-import jwtDecode from "jwt-decode";
+import { jwtDecode } from "jwt-decode";
 
 export function getToken() {
   return localStorage.getItem("token");
@@ -14,7 +14,7 @@ export function getUserRole() {
 
   try {
     const decoded = jwtDecode(token);
-    return decoded.role; // 👈 MUST match backend claim name
+    return decoded.role; // must match backend claim
   } catch {
     return null;
   }
@@ -23,5 +23,6 @@ export function getUserRole() {
 export function logout() {
   localStorage.removeItem("token");
 }
+
 
 
