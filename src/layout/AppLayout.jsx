@@ -1,30 +1,40 @@
 import { Link, Outlet } from "react-router-dom";
+import { logout, isAuthenticated } from "../utils/auth";
 
 export default function AppLayout() {
   return (
-    <div className="min-h-screen bg-gray-100">
-      {/* Navbar */}
-      <nav className="bg-white shadow-sm">
+    <>
+      <nav className="bg-white shadow-sm border-b">
         <div className="max-w-6xl mx-auto px-4 py-3 flex justify-between items-center">
           <h1 className="text-xl font-bold text-blue-600">
             ExpertHour
           </h1>
 
-          <div className="space-x-4 text-sm font-medium">
-            <Link className="hover:text-blue-600" to="/">Signup</Link>
-            <Link className="hover:text-blue-600" to="/login">Login</Link>
-            <Link className="hover:text-blue-600" to="/experts">Experts</Link>
-            <Link className="hover:text-blue-600" to="/book">Book</Link>
+          <div className="flex gap-6 text-sm font-medium">
+            <Link to="/" className="hover:text-blue-600">Signup</Link>
+            <Link to="/login" className="hover:text-blue-600">Login</Link>
+            <Link to="/experts" className="hover:text-blue-600">Experts</Link>
+            <Link to="/availability" className="hover:text-blue-600">Availability</Link>
+            <Link to="/book" className="hover:text-blue-600">Book</Link>
+
+            {isAuthenticated() && (
+              <button
+                onClick={logout}
+                className="text-red-500 hover:text-red-600"
+              >
+                Logout
+              </button>
+            )}
           </div>
         </div>
       </nav>
 
-      {/* Page Content */}
-      <main className="max-w-6xl mx-auto px-4 py-10">
+      <main className="max-w-6xl mx-auto px-4 py-8">
         <Outlet />
       </main>
-    </div>
+    </>
   );
 }
+
 
 

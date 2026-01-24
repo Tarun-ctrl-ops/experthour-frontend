@@ -21,31 +21,48 @@ export default function ExpertPage() {
 
   const submit = async (e) => {
     e.preventDefault();
-    await createExpert({
-      ...form,
-      pricePerHour: Number(form.pricePerHour),
-    });
+    await createExpert({ ...form, pricePerHour: Number(form.pricePerHour) });
     setForm({ name:"", title:"", skills:"", pricePerHour:"", bio:"" });
     loadExperts();
   };
 
   return (
-    <>
-      <h2>Experts</h2>
-      <form onSubmit={submit}>
-        {Object.keys(form).map(k => (
-          <input key={k} value={form[k]}
-            onChange={e => setForm({ ...form, [k]: e.target.value })}
-            placeholder={k} required />
+    <div className="grid grid-cols-3 gap-6">
+      {/* LEFT: Experts list */}
+      <div className="col-span-2 space-y-4">
+        {experts.map(e => (
+          <div key={e.id} className="bg-white p-4 rounded shadow">
+            <h3 className="text-lg font-semibold">{e.name}</h3>
+            <p className="text-sm text-gray-600">{e.title}</p>
+            <p className="mt-2 text-sm">{e.skills}</p>
+            <p className="mt-2 font-semibold text-blue-600">
+              ₹{e.pricePerHour}/hr
+            </p>
+          </div>
         ))}
-        <button>Create Expert</button>
-      </form>
+      </div>
 
-      <ul>
-        {Array.isArray(experts) && experts.map(e => (
-          <li key={e.id}>{e.name} — {e.skills} — ₹{e.pricePerHour}</li>
-        ))}
-      </ul>
-    </>
+      {/* RIGHT: Create expert */}
+      <div className="bg-white p-4 rounded shadow">
+        <h3 className="font-semibold mb-4">Create Expert</h3>
+
+        <form onSubmit={submit} className="space-y-2">
+          {Object.keys(form).map(k => (
+            <input
+              key={k}
+              className="w-full border rounded px-2 py-1"
+              placeholder={k}
+              value={form[k]}
+              onChange={e => setForm({ ...form, [k]: e.target.value })}
+              required
+            />
+          ))}
+          <button className="w-full bg-blue-600 text-white py-2 rounded mt-2">
+            Create
+          </button>
+        </form>
+      </div>
+    </div>
   );
 }
+
