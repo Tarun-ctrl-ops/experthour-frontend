@@ -3,7 +3,7 @@ import { getAllExperts, setAvailability } from "../api/expertApi";
 
 export default function AvailabilityPage() {
   const [experts, setExperts] = useState([]);
-  const [selected, setSelected] = useState("");
+  const [expertId, setExpertId] = useState("");
   const [from, setFrom] = useState("");
   const [to, setTo] = useState("");
 
@@ -13,27 +13,48 @@ export default function AvailabilityPage() {
 
   const submit = async (e) => {
     e.preventDefault();
-    await setAvailability(selected, from, to);
+    await setAvailability(expertId, from, to);
     alert("Availability updated");
   };
 
   return (
-    <>
-      <h2>Set Availability</h2>
+    <div className="max-w-xl bg-white p-6 rounded shadow">
+      <h2 className="text-xl font-bold mb-4">
+        Set Availability
+      </h2>
 
-      <form onSubmit={submit}>
-        <select value={selected} onChange={e => setSelected(e.target.value)} required>
-          <option value="">Select expert</option>
-          {experts.map(e => (
-            <option key={e.id} value={e.id}>{e.name}</option>
+      <form onSubmit={submit} className="space-y-4">
+        <select
+          className="w-full border px-3 py-2 rounded"
+          onChange={(e) => setExpertId(e.target.value)}
+        >
+          <option>Select Expert</option>
+          {experts.map((e) => (
+            <option key={e.id} value={e.id}>
+              {e.name}
+            </option>
           ))}
         </select>
 
-        <input value={from} onChange={e => setFrom(e.target.value)} placeholder="From (09:00)" />
-        <input value={to} onChange={e => setTo(e.target.value)} placeholder="To (17:00)" />
+        <input
+          placeholder="From (09:00)"
+          className="w-full border px-3 py-2 rounded"
+          value={from}
+          onChange={(e) => setFrom(e.target.value)}
+        />
 
-        <button>Save</button>
+        <input
+          placeholder="To (17:00)"
+          className="w-full border px-3 py-2 rounded"
+          value={to}
+          onChange={(e) => setTo(e.target.value)}
+        />
+
+        <button className="w-full bg-linkedin text-white py-2 rounded">
+          Save
+        </button>
       </form>
-    </>
+    </div>
   );
 }
+

@@ -8,61 +8,62 @@ export default function ExpertPage() {
     title: "",
     skills: "",
     pricePerHour: "",
-    bio: ""
+    bio: "",
   });
 
-  const loadExperts = async () => {
-    setExperts(await getAllExperts());
-  };
-
   useEffect(() => {
-    loadExperts();
+    getAllExperts().then(setExperts);
   }, []);
 
   const submit = async (e) => {
     e.preventDefault();
-    await createExpert({ ...form, pricePerHour: Number(form.pricePerHour) });
-    setForm({ name:"", title:"", skills:"", pricePerHour:"", bio:"" });
-    loadExperts();
+    await createExpert({
+      ...form,
+      pricePerHour: Number(form.pricePerHour),
+    });
+    alert("Expert created");
   };
 
   return (
-    <div className="grid grid-cols-3 gap-6">
-      {/* LEFT: Experts list */}
+    <div className="grid grid-cols-3 gap-8">
       <div className="col-span-2 space-y-4">
-        {experts.map(e => (
-          <div key={e.id} className="bg-white p-4 rounded shadow">
-            <h3 className="text-lg font-semibold">{e.name}</h3>
+        {experts.map((e) => (
+          <div
+            key={e.id}
+            className="bg-white p-6 rounded shadow"
+          >
+            <h3 className="text-lg font-bold">{e.name}</h3>
             <p className="text-sm text-gray-600">{e.title}</p>
-            <p className="mt-2 text-sm">{e.skills}</p>
-            <p className="mt-2 font-semibold text-blue-600">
+            <p className="mt-2">{e.skills}</p>
+            <p className="mt-2 text-linkedin font-semibold">
               ₹{e.pricePerHour}/hr
             </p>
           </div>
         ))}
       </div>
 
-      {/* RIGHT: Create expert */}
-      <div className="bg-white p-4 rounded shadow">
-        <h3 className="font-semibold mb-4">Create Expert</h3>
-
-        <form onSubmit={submit} className="space-y-2">
-          {Object.keys(form).map(k => (
-            <input
-              key={k}
-              className="w-full border rounded px-2 py-1"
-              placeholder={k}
-              value={form[k]}
-              onChange={e => setForm({ ...form, [k]: e.target.value })}
-              required
-            />
-          ))}
-          <button className="w-full bg-blue-600 text-white py-2 rounded mt-2">
-            Create
-          </button>
-        </form>
-      </div>
+      <form
+        onSubmit={submit}
+        className="bg-white p-6 rounded shadow space-y-3"
+      >
+        <h3 className="font-bold">Create Expert</h3>
+        {Object.keys(form).map((k) => (
+          <input
+            key={k}
+            placeholder={k}
+            className="w-full border px-3 py-2 rounded"
+            value={form[k]}
+            onChange={(e) =>
+              setForm({ ...form, [k]: e.target.value })
+            }
+          />
+        ))}
+        <button className="w-full bg-linkedin text-white py-2 rounded">
+          Create
+        </button>
+      </form>
     </div>
   );
 }
+
 

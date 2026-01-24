@@ -1,40 +1,44 @@
 import { Link, Outlet } from "react-router-dom";
-import { logout, isAuthenticated } from "../utils/auth";
+import { isAuthenticated, logout } from "../utils/auth";
 
 export default function AppLayout() {
   return (
     <>
-      <nav className="bg-white shadow-sm border-b">
-        <div className="max-w-6xl mx-auto px-4 py-3 flex justify-between items-center">
-          <h1 className="text-xl font-bold text-blue-600">
+      <header className="bg-white border-b">
+        <div className="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
+          <h1 className="text-2xl font-bold text-linkedin">
             ExpertHour
           </h1>
 
-          <div className="flex gap-6 text-sm font-medium">
-            <Link to="/" className="hover:text-blue-600">Signup</Link>
-            <Link to="/login" className="hover:text-blue-600">Login</Link>
-            <Link to="/experts" className="hover:text-blue-600">Experts</Link>
-            <Link to="/availability" className="hover:text-blue-600">Availability</Link>
-            <Link to="/book" className="hover:text-blue-600">Book</Link>
+          <nav className="flex items-center gap-6 text-sm font-medium">
+            <Link to="/experts">Experts</Link>
+            <Link to="/availability">Availability</Link>
+            <Link to="/book">Book</Link>
 
-            {isAuthenticated() && (
+            {!isAuthenticated() ? (
+              <>
+                <Link to="/">Signup</Link>
+                <Link to="/login">Login</Link>
+              </>
+            ) : (
               <button
                 onClick={logout}
-                className="text-red-500 hover:text-red-600"
+                className="text-red-600"
               >
                 Logout
               </button>
             )}
-          </div>
+          </nav>
         </div>
-      </nav>
+      </header>
 
-      <main className="max-w-6xl mx-auto px-4 py-8">
+      <main className="max-w-6xl mx-auto px-6 py-10">
         <Outlet />
       </main>
     </>
   );
 }
+
 
 
 
