@@ -12,14 +12,15 @@ export default function ExpertPage() {
   });
 
   useEffect(() => {
-    getAllExperts().then(res => {
-      setExperts(res.data);
+    getAllExperts().then(data => {
+      setExperts(data); // ✅ data IS the array
     });
   }, []);
 
   async function submit(e) {
     e.preventDefault();
     await createExpert(form);
+
     setForm({
       name: "",
       title: "",
@@ -27,14 +28,17 @@ export default function ExpertPage() {
       pricePerHour: "",
       bio: ""
     });
-    const res = await getAllExperts();
-    setExperts(res.data);
+
+    const data = await getAllExperts();
+    setExperts(data); // ✅ again, direct array
   }
 
   return (
     <div className="grid-2">
       {/* LEFT: EXPERT LIST */}
       <div>
+        {experts.length === 0 && <p>No experts found</p>}
+
         {experts.map(expert => (
           <div className="card" key={expert.id}>
             <h3>{expert.name}</h3>
@@ -50,49 +54,35 @@ export default function ExpertPage() {
       <div className="card">
         <h3>Create Expert</h3>
         <form onSubmit={submit}>
-          <div className="form-group">
-            <input
-              placeholder="Name"
-              value={form.name}
-              onChange={e => setForm({ ...form, name: e.target.value })}
-            />
-          </div>
-
-          <div className="form-group">
-            <input
-              placeholder="Title"
-              value={form.title}
-              onChange={e => setForm({ ...form, title: e.target.value })}
-            />
-          </div>
-
-          <div className="form-group">
-            <input
-              placeholder="Skills (comma separated)"
-              value={form.skills}
-              onChange={e => setForm({ ...form, skills: e.target.value })}
-            />
-          </div>
-
-          <div className="form-group">
-            <input
-              placeholder="Price per hour"
-              value={form.pricePerHour}
-              onChange={e => setForm({ ...form, pricePerHour: e.target.value })}
-            />
-          </div>
-
-          <div className="form-group">
-            <textarea
-              placeholder="Bio"
-              value={form.bio}
-              onChange={e => setForm({ ...form, bio: e.target.value })}
-            />
-          </div>
-
+          <input
+            placeholder="Name"
+            value={form.name}
+            onChange={e => setForm({ ...form, name: e.target.value })}
+          />
+          <input
+            placeholder="Title"
+            value={form.title}
+            onChange={e => setForm({ ...form, title: e.target.value })}
+          />
+          <input
+            placeholder="Skills"
+            value={form.skills}
+            onChange={e => setForm({ ...form, skills: e.target.value })}
+          />
+          <input
+            placeholder="Price per hour"
+            value={form.pricePerHour}
+            onChange={e => setForm({ ...form, pricePerHour: e.target.value })}
+          />
+          <textarea
+            placeholder="Bio"
+            value={form.bio}
+            onChange={e => setForm({ ...form, bio: e.target.value })}
+          />
           <button>Create Expert</button>
         </form>
       </div>
     </div>
   );
 }
+
