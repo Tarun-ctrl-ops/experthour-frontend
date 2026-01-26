@@ -5,7 +5,16 @@ export function getToken() {
 }
 
 export function isAuthenticated() {
-  return !!getToken();
+  const token = getToken();
+  if (!token) return false;
+
+  try {
+    const decoded = jwtDecode(token);
+    const now = Date.now() / 1000;
+    return decoded.exp && decoded.exp > now;
+  } catch {
+    return false;
+  }
 }
 
 export function getUserRole() {
@@ -14,7 +23,19 @@ export function getUserRole() {
 
   try {
     const decoded = jwtDecode(token);
-    return decoded.role; // must match backend claim
+    return decoded.role || null;
+  } catch {
+    return null;
+  }
+}
+
+export function getUserEmail() {
+  const token = getToken();
+  if (!token) return null;
+
+  try {
+    const decoded = jwtDecode(token);
+    return decoded.sub || null;
   } catch {
     return null;
   }
@@ -22,7 +43,5 @@ export function getUserRole() {
 
 export function logout() {
   localStorage.removeItem("token");
+  window.location.href = "/login";
 }
-
-
-

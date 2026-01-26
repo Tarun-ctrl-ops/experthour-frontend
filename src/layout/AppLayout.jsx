@@ -1,30 +1,13 @@
-import { Outlet, Link } from "react-router-dom";
-import "../styles/global.css";
-import { logout } from "../utils/auth";
+import { Outlet } from "react-router-dom";
+import Navbar from "../components/Navbar";
 
 export default function AppLayout() {
   return (
-    <>
-      <header className="header">
-        <div className="header-inner">
-          <div className="logo">ExpertHour</div>
-          <nav className="nav">
-            <Link to="/experts">Experts</Link>
-            <Link to="/availability">Availability</Link>
-            <Link to="/book">Book</Link>
-            <button onClick={logout}>Logout</button>
-          </nav>
-        </div>
-      </header>
-
-      <main className="container">
+    <div className="min-h-screen bg-gray-50">
+      <Navbar />
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <Outlet />
       </main>
-    </>
+    </div>
   );
 }
-
-
-
-
-

@@ -1,88 +1,254 @@
 import { useEffect, useState } from "react";
 import { getAllExperts, createExpert } from "../api/expertApi";
+import { getUserRole } from "../utils/auth";
 
 export default function ExpertPage() {
   const [experts, setExperts] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [showForm, setShowForm] = useState(false);
   const [form, setForm] = useState({
     name: "",
     title: "",
     skills: "",
     pricePerHour: "",
-    bio: ""
+    bio: "",
   });
+  const [submitting, setSubmitting] = useState(false);
+  const role = getUserRole();
 
   useEffect(() => {
-    getAllExperts().then(data => {
-      setExperts(data); // ✅ data IS the array
-    });
+    loadExperts();
   }, []);
+
+  async function loadExperts() {
+    setLoading(true);
+    try {
+      const data = await getAllExperts();
+      setExperts(data);
+    } catch (err) {
+      console.error("Failed to load experts", err);
+    } finally {
+      setLoading(false);
+    }
+  }
 
   async function submit(e) {
     e.preventDefault();
-    await createExpert(form);
+    setSubmitting(true);
 
-    setForm({
-      name: "",
-      title: "",
-      skills: "",
-      pricePerHour: "",
-      bio: ""
-    });
+    try {
+      await createExpert({
+        ...form,
+        pricePerHour: parseFloat(form.pricePerHour),
+      });
 
-    const data = await getAllExperts();
-    setExperts(data); // ✅ again, direct array
+      setForm({
+        name: "",
+        title: "",
+        skills: "",
+        pricePerHour: "",
+        bio: "",
+      });
+      setShowForm(false);
+      loadExperts();
+    } catch (err) {
+      alert("Failed to create expert profile");
+    } finally {
+      setSubmitting(false);
+    }
+  }
+
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center min-h-[60vh]">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-linkedin"></div>
+      </div>
+    );
   }
 
   return (
-    <div className="grid-2">
-      {/* LEFT: EXPERT LIST */}
-      <div>
-        {experts.length === 0 && <p>No experts found</p>}
+    <div className="space-y-6">
+      <div className="flex justify-between items-center">
+        <div>
+          <h1 className="text-3xl font-bold text-gray-900">Expert Marketplace</h1>
+          <p className="mt-1 text-gray-600">
+            Connect with industry experts for 1-on-1 consultations
+          </p>
+        </div>
 
-        {experts.map(expert => (
-          <div className="card" key={expert.id}>
-            <h3>{expert.name}</h3>
-            <p><strong>{expert.title}</strong></p>
-            <p>{expert.skills}</p>
-            <p>₹{expert.pricePerHour} / hour</p>
-            <p>{expert.bio}</p>
-          </div>
-        ))}
+        {role !== "EXPERT" && (
+          <button
+            onClick={() => setShowForm(!showForm)}
+            className="bg-linkedin text-white px-6 py-2.5 rounded-full font-semibold hover:bg-blue-700 transition-colors"
+          >
+            {showForm ? "Cancel" : "Become an Expert"}
+          </button>
+        )}
       </div>
 
-      {/* RIGHT: CREATE EXPERT */}
-      <div className="card">
-        <h3>Create Expert</h3>
-        <form onSubmit={submit}>
-          <input
-            placeholder="Name"
-            value={form.name}
-            onChange={e => setForm({ ...form, name: e.target.value })}
-          />
-          <input
-            placeholder="Title"
-            value={form.title}
-            onChange={e => setForm({ ...form, title: e.target.value })}
-          />
-          <input
-            placeholder="Skills"
-            value={form.skills}
-            onChange={e => setForm({ ...form, skills: e.target.value })}
-          />
-          <input
-            placeholder="Price per hour"
-            value={form.pricePerHour}
-            onChange={e => setForm({ ...form, pricePerHour: e.target.value })}
-          />
-          <textarea
-            placeholder="Bio"
-            value={form.bio}
-            onChange={e => setForm({ ...form, bio: e.target.value })}
-          />
-          <button>Create Expert</button>
-        </form>
-      </div>
+      {showForm && (
+        <div className="bg-white rounded-lg shadow-md p-6 border border-gray-200">
+          <h3 className="text-xl font-semibold text-gray-900 mb-4">
+            Create Your Expert Profile
+          </h3>
+
+          <form onSubmit={submit} className="space-y-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Full Name
+                </label>
+                <input
+                  type="text"
+                  value={form.name}
+                  onChange={(e) => setForm({ ...form, name: e.target.value })}
+                  className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-linkedin focus:border-transparent outline-none"
+                  placeholder="John Doe"
+                  required
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Professional Title
+                </label>
+                <input
+                  type="text"
+                  value={form.title}
+                  onChange={(e) => setForm({ ...form, title: e.target.value })}
+                  className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-linkedin focus:border-transparent outline-none"
+                  placeholder="Senior Software Engineer"
+                  required
+                />
+              </div>
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Skills & Expertise
+              </label>
+              <input
+                type="text"
+                value={form.skills}
+                onChange={(e) => setForm({ ...form, skills: e.target.value })}
+                className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-linkedin focus:border-transparent outline-none"
+                placeholder="React, Node.js, System Design, AWS"
+                required
+              />
+              <p className="mt-1 text-xs text-gray-500">
+                Separate skills with commas
+              </p>
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Hourly Rate (₹)
+              </label>
+              <input
+                type="number"
+                value={form.pricePerHour}
+                onChange={(e) => setForm({ ...form, pricePerHour: e.target.value })}
+                className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-linkedin focus:border-transparent outline-none"
+                placeholder="2000"
+                min="100"
+                required
+              />
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Bio
+              </label>
+              <textarea
+                value={form.bio}
+                onChange={(e) => setForm({ ...form, bio: e.target.value })}
+                className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-linkedin focus:border-transparent outline-none"
+                placeholder="Tell potential clients about your experience and what you can help them with..."
+                rows={4}
+                required
+              />
+            </div>
+
+            <button
+              type="submit"
+              disabled={submitting}
+              className="w-full bg-linkedin text-white py-3 rounded-full font-semibold hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              {submitting ? "Creating Profile..." : "Create Expert Profile"}
+            </button>
+          </form>
+        </div>
+      )}
+
+      {experts.length === 0 ? (
+        <div className="text-center py-12 bg-white rounded-lg shadow-md">
+          <svg
+            className="mx-auto h-12 w-12 text-gray-400"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"
+            />
+          </svg>
+          <h3 className="mt-2 text-lg font-medium text-gray-900">No experts yet</h3>
+          <p className="mt-1 text-gray-500">Be the first to create an expert profile!</p>
+        </div>
+      ) : (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {experts.map((expert) => (
+            <ExpertCard key={expert.id} expert={expert} />
+          ))}
+        </div>
+      )}
     </div>
   );
 }
 
+function ExpertCard({ expert }) {
+  return (
+    <div className="bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow overflow-hidden border border-gray-200">
+      <div className="p-6">
+        <div className="flex items-center space-x-3 mb-3">
+          <div className="w-16 h-16 bg-linkedin rounded-full flex items-center justify-center text-white font-bold text-xl">
+            {expert.name.charAt(0)}
+          </div>
+          <div className="flex-1">
+            <h3 className="font-semibold text-lg text-gray-900">{expert.name}</h3>
+            <p className="text-sm text-gray-600">{expert.title}</p>
+          </div>
+        </div>
+
+        <div className="space-y-3">
+          <div className="flex flex-wrap gap-2">
+            {expert.skills.split(",").map((skill, idx) => (
+              <span
+                key={idx}
+                className="px-3 py-1 bg-blue-50 text-linkedin text-xs font-medium rounded-full"
+              >
+                {skill.trim()}
+              </span>
+            ))}
+          </div>
+
+          <p className="text-sm text-gray-600 line-clamp-3">{expert.bio}</p>
+
+          <div className="pt-3 border-t border-gray-200 flex items-center justify-between">
+            <div>
+              <p className="text-2xl font-bold text-gray-900">₹{expert.pricePerHour}</p>
+              <p className="text-xs text-gray-500">per hour</p>
+            </div>
+
+            <button className="bg-linkedin text-white px-5 py-2 rounded-full font-semibold hover:bg-blue-700 transition-colors text-sm">
+              Book Session
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}

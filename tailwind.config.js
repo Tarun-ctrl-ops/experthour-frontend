@@ -1,12 +1,21 @@
+/** @type {import('tailwindcss').Config} */
 export default {
-  content: ["./index.html", "./src/**/*.{js,jsx}"],
+  content: [
+    "./index.html",
+    "./src/**/*.{js,jsx,ts,tsx}",
+  ],
   theme: {
     extend: {
       colors: {
-        linkedin: "#0A66C2",
+        linkedin: {
+          DEFAULT: "#0A66C2",
+          dark: "#004182",
+          light: "#E8F3FF",
+        },
       },
     },
   },
   plugins: [],
 };
+
 
