@@ -3,85 +3,77 @@
 @tailwind utilities;
 
 /* ========================================
-   PRODUCTION-READY GLOBAL STYLES
+   GLOBAL BASE STYLES (TAILWIND v4 SAFE)
    ======================================== */
 
-@layer base {
-  * {
-    @apply box-border;
-  }
-
-  body {
-    @apply bg-gray-50 text-gray-900 antialiased;
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
-                 "Helvetica Neue", Arial, sans-serif;
-  }
-
-  /* Smooth scrolling */
-  html {
-    @apply scroll-smooth;
-  }
-
-  /* Remove default margins */
-  h1, h2, h3, h4, h5, h6, p {
-    @apply m-0;
-  }
-
-  /* Focus styles for accessibility */
-  button:focus-visible,
-  a:focus-visible,
-  input:focus-visible,
-  textarea:focus-visible,
-  select:focus-visible {
-    @apply outline-none ring-2 ring-linkedin ring-offset-2;
-  }
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
 }
 
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  background-color: #f9fafb; /* gray-50 */
+  color: #111827;            /* gray-900 */
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI",
+               Roboto, "Helvetica Neue", Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Remove default margins */
+h1, h2, h3, h4, h5, h6, p {
+  margin: 0;
+}
+
+/* ========================================
+   COMPONENTS (SAFE @apply)
+   ======================================== */
+
 @layer components {
-  /* LinkedIn-style card */
   .card {
-    @apply bg-white rounded-lg shadow-sm border border-gray-200 p-4;
+    @apply bg-white rounded-lg border border-gray-200 shadow-sm p-4;
   }
 
   .card:hover {
     @apply shadow-md;
   }
 
-  /* Primary button */
   .btn-primary {
-    @apply bg-linkedin text-white px-6 py-2.5 rounded-full
-           font-semibold hover:bg-blue-700 transition-all
+    @apply bg-blue-600 text-white px-6 py-2.5 rounded-full
+           font-semibold hover:bg-blue-700 transition
            disabled:opacity-50 disabled:cursor-not-allowed;
   }
 
-  /* Secondary button */
   .btn-secondary {
     @apply border border-gray-300 text-gray-700 px-6 py-2.5
-           rounded-full font-semibold hover:bg-gray-50
-           transition-all;
+           rounded-full font-semibold hover:bg-gray-50 transition;
   }
 
-  /* Input field */
   .input {
     @apply w-full px-4 py-2.5 border border-gray-300 rounded-lg
-           focus:ring-2 focus:ring-linkedin focus:border-transparent
-           outline-none transition-all;
+           focus:outline-none focus:ring-2 focus:ring-blue-600;
   }
 
-  /* Badge */
   .badge {
-    @apply px-3 py-1 bg-blue-50 text-linkedin text-xs
+    @apply px-3 py-1 bg-blue-50 text-blue-600 text-xs
            font-medium rounded-full;
   }
 
-  /* Loading spinner */
   .spinner {
-    @apply animate-spin rounded-full border-b-2 border-linkedin;
+    @apply animate-spin rounded-full border-b-2 border-blue-600;
   }
 }
 
+/* ========================================
+   UTILITIES
+   ======================================== */
+
 @layer utilities {
-  /* Text truncation helpers */
   .line-clamp-1 {
     display: -webkit-box;
     -webkit-line-clamp: 1;
@@ -102,160 +94,4 @@
     -webkit-box-orient: vertical;
     overflow: hidden;
   }
-
-  /* LinkedIn-style hover effect */
-  .hover-lift {
-    @apply transition-transform hover:-translate-y-1;
-  }
-
-  /* Subtle shadow on scroll */
-  .shadow-scroll {
-    @apply shadow-sm;
-  }
-}
-
-/* ========================================
-   CUSTOM ANIMATIONS
-   ======================================== */
-
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-@keyframes slideInRight {
-  from {
-    opacity: 0;
-    transform: translateX(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateX(0);
-  }
-}
-
-.animate-fade-in {
-  animation: fadeIn 0.3s ease-out;
-}
-
-.animate-slide-in {
-  animation: slideInRight 0.4s ease-out;
-}
-
-/* ========================================
-   SCROLLBAR STYLING
-   ======================================== */
-
-/* Firefox */
-* {
-  scrollbar-width: thin;
-  scrollbar-color: #cbd5e1 #f1f5f9;
-}
-
-/* Chrome, Edge, Safari */
-*::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
-}
-
-*::-webkit-scrollbar-track {
-  background: #f1f5f9;
-}
-
-*::-webkit-scrollbar-thumb {
-  background: #cbd5e1;
-  border-radius: 4px;
-}
-
-*::-webkit-scrollbar-thumb:hover {
-  background: #94a3b8;
-}
-
-/* ========================================
-   PRINT STYLES
-   ======================================== */
-
-@media print {
-  body {
-    @apply bg-white;
-  }
-
-  nav,
-  button,
-  .no-print {
-    display: none !important;
-  }
-}
-
-/* ========================================
-   MOBILE OPTIMIZATIONS
-   ======================================== */
-
-@media (max-width: 640px) {
-  /* Larger touch targets on mobile */
-  button,
-  a {
-    @apply min-h-[44px];
-  }
-
-  /* Better mobile spacing */
-  .card {
-    @apply p-4;
-  }
-}
-
-/* ========================================
-   ACCESSIBILITY
-   ======================================== */
-
-/* Skip to main content link */
-.skip-link {
-  @apply absolute -left-full top-0 z-50 bg-linkedin text-white
-         px-4 py-2 focus:left-0;
-}
-
-/* Screen reader only text */
-.sr-only {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  padding: 0;
-  margin: -1px;
-  overflow: hidden;
-  clip: rect(0, 0, 0, 0);
-  white-space: nowrap;
-  border-width: 0;
-}
-
-/* Reduced motion support */
-@media (prefers-reduced-motion: reduce) {
-  *,
-  *::before,
-  *::after {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
-  }
-}
-
-/* ========================================
-   DARK MODE SUPPORT (Future Enhancement)
-   ======================================== */
-
-@media (prefers-color-scheme: dark) {
-  /* Uncomment when implementing dark mode
-  body {
-    @apply bg-gray-900 text-gray-100;
-  }
-
-  .card {
-    @apply bg-gray-800 border-gray-700;
-  }
-  */
 }
