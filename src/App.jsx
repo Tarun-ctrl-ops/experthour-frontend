@@ -16,34 +16,37 @@ export default function App() {
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<AppLayout />}>
-          <Route index element={<UserPage />} />
-          <Route path="login" element={<LoginPage />} />
+          {/* ✅ REAL HOME */}
+          <Route index element={<Navigate to="/experts" replace />} />
 
-          {/* Public Routes */}
+          {/* Public */}
           <Route path="experts" element={<ExpertPage />} />
+          <Route path="login" element={<LoginPage />} />
+          <Route path="join" element={<UserPage />} />
 
-          {/* Protected Routes - Any Authenticated User */}
+          {/* Authenticated */}
           <Route element={<ProtectedRoute />}>
             <Route path="booking-success" element={<BookingSuccessPage />} />
           </Route>
 
-          {/* USER ONLY Routes */}
+          {/* USER */}
           <Route element={<RoleProtectedRoute allowedRoles={["USER"]} />}>
             <Route path="book" element={<BookingPage />} />
-          </Route>
-
-          {/* EXPERT ONLY Routes */}
-          <Route element={<RoleProtectedRoute allowedRoles={["EXPERT"]} />}>
-            <Route path="availability" element={<AvailabilityPage />} />
             <Route path="my-bookings" element={<MyBookingsPage />} />
           </Route>
 
-          {/* 404 */}
-          <Route path="*" element={<Navigate to="/" replace />} />
+          {/* EXPERT */}
+          <Route element={<RoleProtectedRoute allowedRoles={["EXPERT"]} />}>
+            <Route path="availability" element={<AvailabilityPage />} />
+          </Route>
+
+          {/* Fallback */}
+          <Route path="*" element={<Navigate to="/experts" replace />} />
         </Route>
       </Routes>
     </BrowserRouter>
   );
 }
+
 
 
