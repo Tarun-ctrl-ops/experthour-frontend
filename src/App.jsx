@@ -32,13 +32,15 @@ export default function App() {
           {/* USER */}
           <Route element={<RoleProtectedRoute allowedRoles={["USER"]} />}>
             <Route path="book" element={<BookingPage />} />
-            <Route path="my-bookings" element={<MyBookingsPage />} />
+            <Route path="/my-bookings" element={<MyBookingsPage />} />
           </Route>
 
           {/* EXPERT */}
-          <Route element={<RoleProtectedRoute allowedRoles={["EXPERT"]} />}>
-            <Route path="availability" element={<AvailabilityPage />} />
+          <Route
+            element={<RoleProtectedRoute allowedRoles={["EXPERT"]} />}>
+            <Route path="/expert-bookings" element={<ExpertBookingsPage />} />
           </Route>
+
 
           {/* Fallback */}
           <Route path="*" element={<Navigate to="/experts" replace />} />

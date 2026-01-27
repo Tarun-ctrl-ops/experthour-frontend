@@ -1,23 +1,20 @@
-import api from "./client";
+import { getToken } from "../utils/auth";
 
-export const createPaymentSession = async (
-  expertId,
-  startTime,
-  endTime,
-  amount
-) => {
-  const response = await api.post("/payments/create-session", {
-    expertId,
-    startTime,
-    endTime,
-    amount,
-    successUrl: `${window.location.origin}/booking-success`,
-    cancelUrl: `${window.location.origin}/book`,
+const BASE = import.meta.env.VITE_API_URL;
+
+export async function startCheckout(bookingId) {
+  const res = await fetch(`${BASE}/api/payments/checkout`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${getToken()}`,
+    },
+    body: JSON.stringify({ bookingId }),
   });
-  return response.data;
-};
 
-export const verifyPayment = async (sessionId) => {
-  const response = await api.get(`/payments/verify/${sessionId}`);
-  return response.data;
-};
+  if (!res.ok) {
+    throw new Error("Checkout failed");
+  }
+
+  return res.text(); // Stripe URL
+}

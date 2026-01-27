@@ -3,21 +3,28 @@ export default {
   content: ["./index.html", "./src/**/*.{js,jsx,ts,tsx}"],
   theme: {
     extend: {
-      colors: {
-        linkedin: {
-          DEFAULT: "#0A66C2",
-          dark: "#004182",
-          light: "#E8F3FF",
-        },
-        surface: "#F3F6F8",
+      fontFamily: {
+        sans: [
+          "-apple-system",
+          "BlinkMacSystemFont",
+          "Segoe UI",
+          "Roboto",
+          "Helvetica Neue",
+          "Arial",
+          "sans-serif",
+        ],
       },
-      maxWidth: {
-        app: "1200px",
+      colors: {
+        brand: {
+          primary: "#0A66C2",
+          hover: "#004182",
+          subtle: "#E8F3FF",
+        },
       },
     },
-  },
   plugins: [],
 };
+
 
 
 

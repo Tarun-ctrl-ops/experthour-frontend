@@ -91,15 +91,11 @@ export default function Navbar() {
 
 function NavLink({ to, active, children }) {
   return (
-    <Link
-      to={to}
-      className={`flex items-center space-x-1 px-4 py-2 text-sm font-medium rounded-full transition-colors ${
-        active
-          ? "text-linkedin bg-blue-50"
-          : "text-gray-700 hover:text-linkedin hover:bg-gray-50"
-      }`}
-    >
-      {children}
+    <Link to="/availability" className="hover:underline">
+      Availability
     </Link>
+    <Link to="/expert-bookings">Sessions</Link>
+
+
   );
 }

@@ -1,47 +1,70 @@
-import { Outlet, Link } from "react-router-dom";
+import { Outlet, Link, useNavigate } from "react-router-dom";
 import { isAuthenticated, getUserRole, logout } from "../utils/auth";
 
 export default function AppLayout() {
+  const auth = isAuthenticated();
   const role = getUserRole();
-  const loggedIn = isAuthenticated();
+  const navigate = useNavigate();
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <>
       {/* NAVBAR */}
-      <header className="bg-white border-b border-gray-200">
-        <div className="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
-          <Link to="/experts" className="text-2xl font-bold text-gray-900">
+      <header className="sticky top-0 z-50 bg-white border-b border-gray-200">
+        <div className="max-w-7xl mx-auto px-4 h-16 flex items-center justify-between">
+          {/* Left */}
+          <Link
+            to="/"
+            className="text-xl font-bold text-linkedin tracking-tight"
+          >
             ExpertHour
           </Link>
 
-          <nav className="flex items-center gap-6 text-sm font-medium">
-            <Link to="/experts" className="text-gray-700 hover:text-linkedin">
+          {/* Right */}
+          <nav className="flex items-center gap-6 text-sm font-medium text-gray-700">
+            <Link
+              to="/experts"
+              className="hover:text-linkedin transition"
+            >
               Experts
             </Link>
 
-            {role === "USER" && (
-              <Link to="/my-bookings" className="text-gray-700 hover:text-linkedin">
+            {auth && role === "EXPERT" && (
+              <>
+                <Link
+                  to="/availability"
+                  className="hover:text-linkedin transition"
+                >
+                  Availability
+                </Link>
+                <Link
+                  to="/my-bookings"
+                  className="hover:text-linkedin transition"
+                >
+                  My Bookings
+                </Link>
+              </>
+            )}
+
+            {auth && role === "USER" && (
+              <Link
+                to="/my-bookings"
+                className="hover:text-linkedin transition"
+              >
                 My Bookings
               </Link>
             )}
 
-            {role === "EXPERT" && (
-              <Link to="/availability" className="text-gray-700 hover:text-linkedin">
-                Availability
-              </Link>
-            )}
-
-            {!loggedIn ? (
-              <Link
-                to="/login"
-                className="bg-linkedin text-white px-4 py-2 rounded-full"
+            {!auth ? (
+              <button
+                onClick={() => navigate("/login")}
+                className="rounded-full border border-linkedin px-4 py-1.5 text-linkedin hover:bg-linkedin hover:text-white transition"
               >
                 Sign in
-              </Link>
+              </button>
             ) : (
               <button
                 onClick={logout}
-                className="text-gray-500 hover:text-red-600"
+                className="text-gray-500 hover:text-red-600 transition"
               >
                 Logout
               </button>
@@ -50,10 +73,10 @@ export default function AppLayout() {
         </div>
       </header>
 
-      {/* MAIN */}
-      <main className="max-w-7xl mx-auto px-6 py-8">
+      {/* PAGE CONTENT */}
+      <main className="min-h-[calc(100vh-4rem)] bg-gray-50">
         <Outlet />
       </main>
-    </div>
+    </>
   );
 }
