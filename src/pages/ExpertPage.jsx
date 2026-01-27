@@ -67,24 +67,30 @@ export default function ExpertPage() {
   }
 
   return (
-    <div className="space-y-6">
-      <div className="flex justify-between items-center">
-        <div>
-          <h1 className="text-3xl font-bold text-gray-900">Expert Marketplace</h1>
-          <p className="mt-1 text-gray-600">
-            Connect with industry experts for 1-on-1 consultations
-          </p>
-        </div>
-
-        {role !== "EXPERT" && (
-          <button
-            onClick={() => setShowForm(!showForm)}
-            className="bg-linkedin text-white px-6 py-2.5 rounded-full font-semibold hover:bg-blue-700 transition-colors"
-          >
-            {showForm ? "Cancel" : "Become an Expert"}
-          </button>
-        )}
+    <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+      <div>
+        <h1 className="text-4xl font-semibold text-gray-900">
+          Find an Expert
+        </h1>
+        <p className="mt-2 text-gray-600 max-w-xl">
+          Book 1-on-1 sessions with vetted professionals across technology,
+          business, and design.
+        </p>
       </div>
+
+      {role !== "EXPERT" && (
+        <button
+          onClick={() => setShowForm(!showForm)}
+          className="inline-flex items-center justify-center rounded-full
+            border border-linkedin text-linkedin
+            px-6 py-2.5 font-semibold
+            hover:bg-linkedin hover:text-white transition"
+        >
+          Become an Expert
+        </button>
+      )}
+    </div>
+
 
       {showForm && (
         <div className="bg-white rounded-lg shadow-md p-6 border border-gray-200">
@@ -211,44 +217,58 @@ export default function ExpertPage() {
 
 function ExpertCard({ expert }) {
   return (
-    <div className="bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow overflow-hidden border border-gray-200">
-      <div className="p-6">
-        <div className="flex items-center space-x-3 mb-3">
-          <div className="w-16 h-16 bg-linkedin rounded-full flex items-center justify-center text-white font-bold text-xl">
+    <div className="bg-white border border-gray-200 rounded-xl hover:shadow-md transition">
+      <div className="p-6 flex flex-col h-full">
+        {/* Header */}
+        <div className="flex items-center gap-4">
+          <div className="w-14 h-14 rounded-full bg-linkedin text-white flex items-center justify-center text-lg font-bold">
             {expert.name.charAt(0)}
           </div>
-          <div className="flex-1">
-            <h3 className="font-semibold text-lg text-gray-900">{expert.name}</h3>
+
+          <div>
+            <h3 className="font-semibold text-gray-900 leading-tight">
+              {expert.name}
+            </h3>
             <p className="text-sm text-gray-600">{expert.title}</p>
           </div>
         </div>
 
-        <div className="space-y-3">
-          <div className="flex flex-wrap gap-2">
-            {expert.skills.split(",").map((skill, idx) => (
-              <span
-                key={idx}
-                className="px-3 py-1 bg-blue-50 text-linkedin text-xs font-medium rounded-full"
-              >
-                {skill.trim()}
-              </span>
-            ))}
+        {/* Skills */}
+        <div className="mt-4 flex flex-wrap gap-2">
+          {expert.skills.split(",").slice(0, 4).map((skill, i) => (
+            <span
+              key={i}
+              className="text-xs font-medium px-2.5 py-1 rounded-full
+                bg-linkedin-light text-linkedin"
+            >
+              {skill.trim()}
+            </span>
+          ))}
+        </div>
+
+        {/* Bio */}
+        <p className="mt-4 text-sm text-gray-600 line-clamp-3 flex-1">
+          {expert.bio}
+        </p>
+
+        {/* Footer */}
+        <div className="mt-6 flex items-center justify-between">
+          <div>
+            <p className="text-xl font-semibold text-gray-900">
+              ₹{expert.pricePerHour}
+            </p>
+            <p className="text-xs text-gray-500">per hour</p>
           </div>
 
-          <p className="text-sm text-gray-600 line-clamp-3">{expert.bio}</p>
-
-          <div className="pt-3 border-t border-gray-200 flex items-center justify-between">
-            <div>
-              <p className="text-2xl font-bold text-gray-900">₹{expert.pricePerHour}</p>
-              <p className="text-xs text-gray-500">per hour</p>
-            </div>
-
-            <button className="bg-linkedin text-white px-5 py-2 rounded-full font-semibold hover:bg-blue-700 transition-colors text-sm">
-              Book Session
-            </button>
-          </div>
+          <button
+            className="rounded-full bg-linkedin px-5 py-2 text-sm
+              font-semibold text-white hover:bg-linkedin-dark transition"
+          >
+            Book
+          </button>
         </div>
       </div>
     </div>
   );
 }
+
